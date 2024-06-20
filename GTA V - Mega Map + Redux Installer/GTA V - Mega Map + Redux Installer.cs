@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using System.Xml.Linq;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.MessageBox;
@@ -18,6 +17,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
     {
         private string _oivFilePath;
         private string _gameDirectory;
+        private string _openIVDirectory;
         private bool _isInstalling;
 
         public bool IsInstalling
@@ -43,6 +43,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
         {
             // Load game directory from environment variable or appsettings.json
             _gameDirectory = Environment.GetEnvironmentVariable("GTAVGameDirectory", EnvironmentVariableTarget.User);
+            _openIVDirectory = Environment.GetEnvironmentVariable("OpenIVDirectory", EnvironmentVariableTarget.User);
 
             if (!string.IsNullOrEmpty(_gameDirectory))
             {
@@ -86,6 +87,21 @@ namespace GTA_V___Mega_Map___Redux_Installer
             }
         }
 
+        private void OpenIVDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "EXE files (*.exe)|*.exe"
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _openIVDirectory = openFileDialog.FileName;
+                openIVDirectoryPathLabel.Content = _openIVDirectory;
+
+                Environment.SetEnvironmentVariable("OpenIVDirectory", _openIVDirectory, EnvironmentVariableTarget.User);
+            }
+        }
+
         private async void Install_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(_oivFilePath) || string.IsNullOrEmpty(_gameDirectory))
@@ -119,49 +135,50 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
         private void InstallMod(string oivFilePath, string gameDirectory, bool installToMods)
         {
-            string extractPath = Path.Combine(Path.GetTempPath(), "temp_oiv_extracted");
-
-            // Extract OIV file
-            if (Directory.Exists(extractPath))
-                Directory.Delete(extractPath, true);
-
-            ZipFile.ExtractToDirectory(oivFilePath, extractPath);
-
-            // Parse assembly.xml
-            var assemblyXmlPath = Path.Combine(extractPath, "assembly.xml");
-            if (!File.Exists(assemblyXmlPath))
-                throw new FileNotFoundException("assembly.xml not found in OIV file.");
-
-            var xdoc = XDocument.Load(assemblyXmlPath);
-            var items = xdoc.Descendants("Item");
-
-            string targetDirectory = installToMods ? Path.Combine(gameDirectory, "mods") : gameDirectory;
-
-            int totalItems = items.Count();
-            int processedItems = 0;
-
-            foreach (var item in items)
+            // Verify the OIV file exists
+            if (!File.Exists(oivFilePath))
             {
-                if (!IsInstalling) // Check for cancellation
-                {
-                    throw new OperationCanceledException("Installation was cancelled.");
-                }
-
-                string source = item.Element("source").Value;
-                string destination = item.Element("destination").Value;
-
-                string sourcePath = Path.Combine(extractPath, source);
-                string destPath = Path.Combine(targetDirectory, destination);
-
-                Directory.CreateDirectory(Path.GetDirectoryName(destPath));
-                File.Copy(sourcePath, destPath, true);
-
-                processedItems++;
-                UpdateProgressBar(processedItems, totalItems);
+                Console.WriteLine($"OIV file not found: { oivFilePath }");
+                return;
             }
 
-            // Cleanup
-            Directory.Delete(extractPath, true);
+            // Determine install location
+            string installLocation = installToMods ? Path.Combine(gameDirectory, "mods") : gameDirectory;
+
+            // Path to OpenIV executable
+            string openIVPath = _openIVDirectory;
+
+            // Command to install the OIV package using OpenIV
+            string arguments = $"\"{ oivFilePath }\" -core.game.select:false -core.game:Five \"{ gameDirectory }\"";
+
+            ProcessStartInfo startInfo = new ProcessStartInfo()
+            {
+                FileName = openIVPath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            using (Process process = new Process())
+            {
+                process.StartInfo = startInfo;
+                process.Start();
+
+                string output = process.StandardOutput.ReadToEnd();
+                string errors = process.StandardError.ReadToEnd();
+
+                process.WaitForExit();
+
+                Console.WriteLine($"Output from { oivFilePath }:");
+                Console.WriteLine(output);
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    Console.WriteLine($"Errors from { oivFilePath }:");
+                    Console.WriteLine(errors);
+                }
+            }
         }
 
         private void UpdateProgressBar(int processedItems, int totalItems)
