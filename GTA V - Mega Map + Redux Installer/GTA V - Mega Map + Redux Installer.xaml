@@ -1,0 +1,44 @@
+﻿<Window x:Class="GTA_V___Mega_Map___Redux_Installer.GTAVMegaMapReduxInstaller"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GTA V - Mega Map + Redux Installer"
+        Height="400"
+        Width="600"
+        WindowStartupLocation="CenterScreen"
+        Background="#1c1c1c"
+        SizeChanged="Window_SizeChanged">
+
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#00FFFF" />
+            <Setter Property="FontFamily" Value="Orbitron" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="#00FFFF" />
+            <Setter Property="Background" Value="#333333" />
+            <Setter Property="BorderBrush" Value="#00FFFF" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="FontFamily" Value="Orbitron" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#00FFFF" />
+            <Setter Property="FontFamily" Value="Orbitron" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel Margin="20" VerticalAlignment="Center">
+            <Label Content="Select OIV File:" />
+            <Button Content="_Browse (Alt + O)" Click="BrowseOivFile_Click" />
+            <Label Content="Select Game Directory:" Margin="0,20,0,0" />
+            <Button Content="_Browse (Alt + G)" Click="BrowseGameDirectory_Click" />
+            <Label x:Name="errorLabel" Content="" Foreground="Red" Margin="0,10,0,0"/>
+            <RadioButton x:Name="installToModsRadio" Content="Install to Mods Folder" IsChecked="True" Margin="0,10,0,0"/>
+            <RadioButton x:Name="installToGameRadio" Content="Install to Game Directory" Margin="0,10,0,0"/>
+            <Button Content="_Install (Alt + I)" Click="Install_Click" Margin="0,20,0,0" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "GTA V - Mega Map + Redux Installer/1.0.0": {
+        "runtime": {
+          "GTA V - Mega Map + Redux Installer.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GTA V - Mega Map + Redux Installer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
