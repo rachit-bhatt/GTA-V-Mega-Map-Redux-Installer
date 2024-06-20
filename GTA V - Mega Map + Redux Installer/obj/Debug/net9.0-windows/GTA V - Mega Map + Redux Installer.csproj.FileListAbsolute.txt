@@ -18,3 +18,11 @@ e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux I
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer.pdb
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer.genruntimeconfig.cache
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\ref\GTA V - Mega Map + Redux Installer.dll
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GeneratedInternalTypeHelper.g.cs
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer_MarkupCompile.lref
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\bin\Debug\net9.0-windows\Microsoft.Extensions.Configuration.dll
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\bin\Debug\net9.0-windows\Microsoft.Extensions.Configuration.Abstractions.dll
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\bin\Debug\net9.0-windows\Microsoft.Extensions.Primitives.dll
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\bin\Debug\net9.0-windows\Newtonsoft.Json.dll
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer.csproj.AssemblyReference.cache
+e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - .8D88CB25.Up2Date

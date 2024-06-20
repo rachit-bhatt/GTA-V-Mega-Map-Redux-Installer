@@ -1,6 +1,10 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
 using System.Xml.Linq;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
@@ -10,14 +14,50 @@ using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace GTA_V___Mega_Map___Redux_Installer
 {
-    public partial class GTAVMegaMapReduxInstaller : Window
+    public partial class GTAVMegaMapReduxInstaller : Window, INotifyPropertyChanged
     {
         private string _oivFilePath;
         private string _gameDirectory;
+        private bool _isInstalling;
+
+        public bool IsInstalling
+        {
+            get => _isInstalling;
+            set
+            {
+                _isInstalling = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public GTAVMegaMapReduxInstaller()
         {
             InitializeComponent();
+            DataContext = this;
+            LoadGameDirectory();
+        }
+
+        private void LoadGameDirectory()
+        {
+            // Load game directory from environment variable or appsettings.json
+            _gameDirectory = Environment.GetEnvironmentVariable("GTAVGameDirectory", EnvironmentVariableTarget.User);
+
+            if (!string.IsNullOrEmpty(_gameDirectory))
+            {
+                gameDirectoryPathLabel.Content = _gameDirectory;
+            }
+            else
+            {
+                // MessageBox.Show("Game directory not set. Please set the GameDirectory environment variable.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Environment.Exit(1); // Optionally, handle this error gracefully
+            }
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void BrowseOivFile_Click(object sender, RoutedEventArgs e)
@@ -35,16 +75,18 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
         private void BrowseGameDirectory_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            var dialog = new FolderBrowserDialog();
             var result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 _gameDirectory = dialog.SelectedPath;
                 gameDirectoryPathLabel.Content = _gameDirectory;
+
+                Environment.SetEnvironmentVariable("GTAVGameDirectory", _gameDirectory, EnvironmentVariableTarget.User);
             }
         }
 
-        private void Install_Click(object sender, RoutedEventArgs e)
+        private async void Install_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(_oivFilePath) || string.IsNullOrEmpty(_gameDirectory))
             {
@@ -53,15 +95,26 @@ namespace GTA_V___Mega_Map___Redux_Installer
             }
 
             bool installToMods = installToModsRadio.IsChecked ?? false;
+            IsInstalling = true;
+
             try
             {
-                InstallMod(_oivFilePath, _gameDirectory, installToMods);
-                MessageBox.Show("Installation completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                await Task.Run(() => InstallMod(_oivFilePath, _gameDirectory, installToMods));
+                MessageBox.Show($"Installation of { Path.GetFileName(_oivFilePath) } completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                errorLabel.Content = $"Installation failed: {ex.Message}";
+                errorLabel.Content = $"Installation failed: { ex.Message }";
             }
+            finally
+            {
+                IsInstalling = false;
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            IsInstalling = false;
         }
 
         private void InstallMod(string oivFilePath, string gameDirectory, bool installToMods)
@@ -84,8 +137,16 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
             string targetDirectory = installToMods ? Path.Combine(gameDirectory, "mods") : gameDirectory;
 
+            int totalItems = items.Count();
+            int processedItems = 0;
+
             foreach (var item in items)
             {
+                if (!IsInstalling) // Check for cancellation
+                {
+                    throw new OperationCanceledException("Installation was cancelled.");
+                }
+
                 string source = item.Element("source").Value;
                 string destination = item.Element("destination").Value;
 
@@ -94,10 +155,43 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
                 Directory.CreateDirectory(Path.GetDirectoryName(destPath));
                 File.Copy(sourcePath, destPath, true);
+
+                processedItems++;
+                UpdateProgressBar(processedItems, totalItems);
             }
 
             // Cleanup
             Directory.Delete(extractPath, true);
+        }
+
+        private void UpdateProgressBar(int processedItems, int totalItems)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                installationProgressBar.Value = (double)processedItems / totalItems * 100;
+            });
+        }
+
+        private void EnableControls(bool enable)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                foreach (var element in LayoutRoot.Children)
+                {
+                    if (element is Label label)
+                    {
+                        label.IsEnabled = enable;
+                    }
+                    else if (element is Button button)
+                    {
+                        button.IsEnabled = enable;
+                    }
+                    else if (element is RadioButton radioButton)
+                    {
+                        radioButton.IsEnabled = enable;
+                    }
+                }
+            });
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -121,6 +215,16 @@ namespace GTA_V___Mega_Map___Redux_Installer
                 {
                     radioButton.FontSize = fontSize;
                 }
+                else if (element is Grid grid)
+                    {
+                        foreach (var grid_element in grid.Children)
+                        {
+                            if (grid_element is Button b)
+                            {
+                                b.FontSize = fontSize;
+                            }
+                        }
+                    }
             }
         }
     }
