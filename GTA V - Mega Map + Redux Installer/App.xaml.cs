@@ -1,6 +1,5 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using Application = System.Windows.Application;
 
 namespace GTA_V___Mega_Map___Redux_Installer;
 
@@ -10,4 +9,3 @@ namespace GTA_V___Mega_Map___Redux_Installer;
 public partial class App : Application
 {
 }
-

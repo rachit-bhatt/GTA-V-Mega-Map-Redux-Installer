@@ -1,9 +1,12 @@
-﻿using Microsoft.Win32;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Windows;
 using System.Xml.Linq;
+using Button = System.Windows.Controls.Button;
+using Label = System.Windows.Controls.Label;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace GTA_V___Mega_Map___Redux_Installer
 {
@@ -19,13 +22,14 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
         private void BrowseOivFile_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
+            var openFileDialog = new OpenFileDialog
             {
                 Filter = "OIV files (*.oiv)|*.oiv"
             };
             if (openFileDialog.ShowDialog() == true)
             {
                 _oivFilePath = openFileDialog.FileName;
+                oivFilePathLabel.Content = _oivFilePath;
             }
         }
 
@@ -36,6 +40,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 _gameDirectory = dialog.SelectedPath;
+                gameDirectoryPathLabel.Content = _gameDirectory;
             }
         }
 
@@ -51,11 +56,11 @@ namespace GTA_V___Mega_Map___Redux_Installer
             try
             {
                 InstallMod(_oivFilePath, _gameDirectory, installToMods);
-                System.Windows.MessageBox.Show("Installation completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Installation completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Installation failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                errorLabel.Content = $"Installation failed: {ex.Message}";
             }
         }
 
@@ -101,11 +106,20 @@ namespace GTA_V___Mega_Map___Redux_Installer
             double currentWidth = e.NewSize.Width;
 
             double fontSize = Math.Min(currentHeight, currentWidth) * 0.03; // 3% of the smaller dimension
-            foreach (var child in LogicalTreeHelper.GetChildren(this))
+
+            foreach (var element in LayoutRoot.Children)
             {
-                if (child is FrameworkElement element)
+                if (element is Label label)
                 {
-                    element.FontSize = fontSize;
+                    label.FontSize = fontSize;
+                }
+                else if (element is Button button)
+                {
+                    button.FontSize = fontSize;
+                }
+                else if (element is RadioButton radioButton)
+                {
+                    radioButton.FontSize = fontSize;
                 }
             }
         }

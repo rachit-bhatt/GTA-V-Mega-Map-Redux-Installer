@@ -6,7 +6,6 @@ e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux I
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer.g.cs
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\App.g.cs
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer_MarkupCompile.cache
-e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer_MarkupCompile.lref
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer.baml
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer.g.resources
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\obj\Debug\net9.0-windows\GTA V - Mega Map + Redux Installer.GeneratedMSBuildEditorConfig.editorconfig

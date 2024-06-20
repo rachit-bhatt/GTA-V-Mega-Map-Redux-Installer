@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "e:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj": {}
+    "E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj": {}
   },
   "projects": {
-    "e:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj": {
+    "E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "e:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj",
+        "projectUniqueName": "E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj",
         "projectName": "GTA V - Mega Map + Redux Installer",
-        "projectPath": "e:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj",
+        "projectPath": "E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj",
         "packagesPath": "C:\\Users\\Ratch\\.nuget\\packages\\",
-        "outputPath": "e:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\obj\\",
+        "outputPath": "E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Ratch\\AppData\\Roaming\\NuGet\\NuGet.Config"
