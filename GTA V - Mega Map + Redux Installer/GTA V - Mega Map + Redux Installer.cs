@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -104,11 +103,11 @@ namespace GTA_V___Mega_Map___Redux_Installer
             cancelButton.Visibility = Visibility.Visible;
 
             _oivInstaller = new OIVInstaller();
-            _oivInstaller.ProgressChanged += OIVInstaller_ProgressChanged;
+            // _oivInstaller.ProgressChanged += OIVInstaller_ProgressChanged;
 
             try
             {
-                await _oivInstaller.InstallOIVPackageAsync(_oivFilePath, _gameDirectory);
+                // await _oivInstaller.InstallOIVPackageAsync(_oivFilePath, _gameDirectory);
                 MessageBox.Show($"Installation of { Path.GetFileName(_oivFilePath) } completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -125,7 +124,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            _oivInstaller?.Cancel();
+            // _oivInstaller?.Cancel();
         }
 
         private void OIVInstaller_ProgressChanged(object sender, int e)

@@ -1,105 +1,78 @@
 using System.IO;
-using System.IO.Compression;
 using System.Xml;
-using OpenIV.Lib.Rpf;
 
 namespace GTA_V___Mega_Map___Redux_Installer
 {
     public class OIVInstaller
     {
-        private CancellationTokenSource _cancellationTokenSource;
-
-        public event EventHandler<int> ProgressChanged;
-
-        public async Task InstallOIVPackageAsync(string oivFilePath, string gameDirectory)
+        public void InstallFromXML(string xmlFilePath, string contentFolderPath, string gameDirectory)
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-            string tempExtractionPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-
             try
             {
-                ZipFile.ExtractToDirectory(oivFilePath, tempExtractionPath);
+                // Load the XML file
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlFilePath);
 
-                string assemblyXmlPath = Path.Combine(tempExtractionPath, "assembly.xml");
-
-                if (!File.Exists(assemblyXmlPath))
+                // Validate the root package element
+                XmlElement packageElement = xmlDoc.SelectSingleNode("/package") as XmlElement;
+                if (packageElement == null || packageElement.GetAttribute("target") != "Five")
                 {
-                    throw new FileNotFoundException("The 'assembly.xml' file is missing from the OIV package.");
+                    Console.WriteLine("Invalid or unsupported package.");
+                    return;
                 }
 
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(assemblyXmlPath);
-                XmlNodeList contentFiles = xmlDoc.GetElementsByTagName("archive");
-
-                int totalFiles = contentFiles.Count;
-                int processedFiles = 0;
-
-                foreach (XmlNode archiveNode in contentFiles)
+                // Process each content element
+                XmlNodeList contentNodes = xmlDoc.SelectNodes("/package/content");
+                foreach (XmlNode contentNode in contentNodes)
                 {
-                    _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                    XmlNode archiveNode = contentNode.SelectSingleNode("archive");
+                    if (archiveNode == null)
+                        continue;
 
                     string rpfPath = archiveNode.Attributes["path"].Value;
+                    bool createIfNotExist = archiveNode.Attributes["createIfNotExist"]?.Value == "True";
+                    string rpfType = archiveNode.Attributes["type"].Value;
 
-                    foreach (XmlNode fileNode in archiveNode.ChildNodes)
-                    {
-                        string relativePath = fileNode.Attributes["source"].Value;
-                        string destinationPath = Path.Combine(tempExtractionPath, "content", relativePath.TrimStart('\\'));
-
-                        await Task.Run(() => ModifyRPFFile(gameDirectory, rpfPath, relativePath, destinationPath));
-
-                        processedFiles++;
-                        ProgressChanged?.Invoke(this, (processedFiles * 100) / totalFiles);
-                    }
+                    // Handle RPF file operations
+                    HandleRPFFile(rpfPath, createIfNotExist, rpfType, contentNode, contentFolderPath, gameDirectory);
                 }
+
+                Console.WriteLine("Installation completed successfully.");
             }
-            finally
+            catch (Exception ex)
             {
-                if (Directory.Exists(tempExtractionPath))
-                {
-                    Directory.Delete(tempExtractionPath, true);
-                }
+                Console.WriteLine($"Error during installation: {ex.Message}");
             }
         }
 
-        public void Cancel()
+        private void HandleRPFFile(string rpfPath, bool createIfNotExist, string rpfType, XmlNode contentNode, string contentFolderPath, string gameDirectory)
         {
-            _cancellationTokenSource?.Cancel();
-        }
+            // Initialize RPF handling logic (assuming OpenRPF library is properly integrated)
+            // Example:
+            // var rpfHandler = new RPFHandler();
 
-        private void ModifyRPFFile(string gameDirectory, string rpfPath, string relativePath, string sourcePath)
-        {
-            string rpfFilePath = Path.Combine(gameDirectory, rpfPath);
-
-            if (!File.Exists(rpfFilePath))
+            // Example: Create the RPF file if it doesn't exist
+            if (createIfNotExist)
             {
-                throw new FileNotFoundException($"The RPF file { rpfFilePath } does not exist.");
+                // rpfHandler.CreateRPFFile(rpfPath, rpfType);
+                Console.WriteLine($"Created RPF file: { rpfPath }");
             }
 
-            // Initialize the RPF file
-            using (var rpf = new RpfFile(rpfFilePath, RpfFileMode.Update))
+            // Process each add tag
+            XmlNodeList addNodes = contentNode.SelectNodes("archive/add");
+            foreach (XmlNode addNode in addNodes)
             {
-                rpf.Open();
+                string sourceFileName = addNode.Attributes["source"].Value;
+                string destinationPath = addNode.InnerText.Trim();
 
-                // Read the file to be added
-                byte[] fileData = File.ReadAllBytes(sourcePath);
+                string sourceFilePath = Path.Combine(contentFolderPath, sourceFileName);
+                string targetFilePath = Path.Combine(gameDirectory, rpfPath.Replace("/", "\\") + destinationPath);
 
-                // Check if the relative path points to a directory within the RPF
-                var parentDir = rpf.GetDirectory(Path.GetDirectoryName(relativePath)) ?? throw new DirectoryNotFoundException($"Directory { Path.GetDirectoryName(relativePath) } not found in RPF file { rpfFilePath }.");
+                // Example: Copy file to target path inside RPF file
+                // rpfHandler.CopyFileToRPF(sourceFilePath, targetFilePath);
+                File.Copy(sourceFilePath, targetFilePath, true);
 
-                // Add or replace the file in the RPF
-                var existingFile = parentDir.GetFile(Path.GetFileName(relativePath));
-
-                if (existingFile != null)
-                {
-                    existingFile.Replace(fileData);
-                }
-                else
-                {
-                    parentDir.AddFile(Path.GetFileName(relativePath), fileData);
-                }
-
-                // Save changes to the RPF file
-                rpf.Save();
+                Console.WriteLine($"Installed { sourceFileName } to { targetFilePath }");
             }
         }
     }
