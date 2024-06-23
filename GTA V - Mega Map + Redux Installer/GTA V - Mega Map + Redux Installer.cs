@@ -1,12 +1,13 @@
-﻿using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
+﻿using System.IO;
 using System.Windows;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using System.Runtime.CompilerServices;
 using Button = System.Windows.Controls.Button;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.MessageBox;
+using GTA_V___Mega_Map___Redux_Installer.Classes;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using RadioButton = System.Windows.Controls.RadioButton;
 
