@@ -3,17 +3,8 @@ using System.Xml;
 
 namespace GTA_V___Mega_Map___Redux_Installer
 {
-    public class OIVInstaller
+    public class OIVInstaller : ProgressEventHandler
     {
-        private bool isCancelled = false;
-
-        public event EventHandler<int> ProgressChanged;
-
-        protected virtual void OnProgressChanged(int progressPercentage, string message)
-        {
-            ProgressChanged?.Invoke(this, new int());
-        }
-
         public void InstallFromXML(string xmlFilePath, string contentFolderPath, string gameDirectory)
         {
             try
@@ -67,11 +58,6 @@ namespace GTA_V___Mega_Map___Redux_Installer
             {
                 OnProgressChanged(0, $"Error during installation: { ex.Message }");
             }
-        }
-
-        public void Cancel()
-        {
-            isCancelled = true;
         }
 
         private void HandleRPFFile(string rpfPath, bool createIfNotExist, string rpfType, XmlNode contentNode, string contentFolderPath, string gameDirectory)
