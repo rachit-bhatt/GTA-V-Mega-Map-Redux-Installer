@@ -5,10 +5,21 @@ namespace GTA_V___Mega_Map___Redux_Installer
 {
     public class OIVInstaller
     {
+        private bool isCancelled = false;
+
+        public event EventHandler<int> ProgressChanged;
+
+        protected virtual void OnProgressChanged(int progressPercentage, string message)
+        {
+            ProgressChanged?.Invoke(this, new int());
+        }
+
         public void InstallFromXML(string xmlFilePath, string contentFolderPath, string gameDirectory)
         {
             try
             {
+                isCancelled = false;
+
                 // Load the XML file
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(xmlFilePath);
@@ -17,14 +28,20 @@ namespace GTA_V___Mega_Map___Redux_Installer
                 XmlElement packageElement = xmlDoc.SelectSingleNode("/package") as XmlElement;
                 if (packageElement == null || packageElement.GetAttribute("target") != "Five")
                 {
-                    Console.WriteLine("Invalid or unsupported package.");
+                    OnProgressChanged(0, "Invalid or unsupported package.");
                     return;
                 }
 
                 // Process each content element
                 XmlNodeList contentNodes = xmlDoc.SelectNodes("/package/content");
+                int totalSteps = contentNodes.Count;
+                int currentStep = 0;
+
                 foreach (XmlNode contentNode in contentNodes)
                 {
+                    currentStep++;
+                    OnProgressChanged((int)(((double)currentStep / totalSteps) * 100), $"Processing step { currentStep } of { totalSteps }");
+
                     XmlNode archiveNode = contentNode.SelectSingleNode("archive");
                     if (archiveNode == null)
                         continue;
@@ -35,14 +52,26 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
                     // Handle RPF file operations
                     HandleRPFFile(rpfPath, createIfNotExist, rpfType, contentNode, contentFolderPath, gameDirectory);
+
+                    // Check if cancelled after each step
+                    if (isCancelled)
+                    {
+                        OnProgressChanged(0, "Installation cancelled.");
+                        return;
+                    }
                 }
 
-                Console.WriteLine("Installation completed successfully.");
+                OnProgressChanged(100, "Installation completed successfully.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error during installation: {ex.Message}");
+                OnProgressChanged(0, $"Error during installation: { ex.Message }");
             }
+        }
+
+        public void Cancel()
+        {
+            isCancelled = true;
         }
 
         private void HandleRPFFile(string rpfPath, bool createIfNotExist, string rpfType, XmlNode contentNode, string contentFolderPath, string gameDirectory)
@@ -55,13 +84,19 @@ namespace GTA_V___Mega_Map___Redux_Installer
             if (createIfNotExist)
             {
                 // rpfHandler.CreateRPFFile(rpfPath, rpfType);
-                Console.WriteLine($"Created RPF file: { rpfPath }");
+                OnProgressChanged(0, $"Created RPF file: {rpfPath}");
             }
 
             // Process each add tag
             XmlNodeList addNodes = contentNode.SelectNodes("archive/add");
+            int totalSteps = addNodes.Count;
+            int currentStep = 0;
+
             foreach (XmlNode addNode in addNodes)
             {
+                currentStep++;
+                OnProgressChanged((int)(((double)currentStep / totalSteps) * 100), $"Adding file { currentStep } of { totalSteps }");
+
                 string sourceFileName = addNode.Attributes["source"].Value;
                 string destinationPath = addNode.InnerText.Trim();
 
@@ -72,7 +107,14 @@ namespace GTA_V___Mega_Map___Redux_Installer
                 // rpfHandler.CopyFileToRPF(sourceFilePath, targetFilePath);
                 File.Copy(sourceFilePath, targetFilePath, true);
 
-                Console.WriteLine($"Installed { sourceFileName } to { targetFilePath }");
+                OnProgressChanged((int)(((double)currentStep / totalSteps) * 100), $"Installed { sourceFileName } to { targetFilePath }");
+
+                // Check if cancelled after each file installation
+                if (isCancelled)
+                {
+                    OnProgressChanged(0, "Installation cancelled.");
+                    return;
+                }
             }
         }
     }

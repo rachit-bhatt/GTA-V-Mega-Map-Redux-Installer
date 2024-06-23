@@ -103,7 +103,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
             cancelButton.Visibility = Visibility.Visible;
 
             _oivInstaller = new OIVInstaller();
-            // _oivInstaller.ProgressChanged += OIVInstaller_ProgressChanged;
+            _oivInstaller.ProgressChanged += OIVInstaller_ProgressChanged;
 
             try
             {
@@ -124,7 +124,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            // _oivInstaller?.Cancel();
+            _oivInstaller?.Cancel();
         }
 
         private void OIVInstaller_ProgressChanged(object sender, int e)
