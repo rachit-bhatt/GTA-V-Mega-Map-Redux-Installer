@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nyB4iNut1/w=",
+  "dgSpecHash": "PzYpNMPYIrY=",
   "success": true,
-  "projectFilePath": "e:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj",
+  "projectFilePath": "E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\GTA V - Mega Map + Redux Installer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Ratch\\.nuget\\packages\\microsoft.extensions.configuration\\8.0.0\\microsoft.extensions.configuration.8.0.0.nupkg.sha512",
     "C:\\Users\\Ratch\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",

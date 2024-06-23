@@ -17,8 +17,8 @@ namespace GTA_V___Mega_Map___Redux_Installer
     {
         private string _oivFilePath;
         private string _gameDirectory;
-        private string _openIVDirectory;
         private bool _isInstalling;
+        private OIVInstaller _oivInstaller;
 
         public bool IsInstalling
         {
@@ -43,7 +43,6 @@ namespace GTA_V___Mega_Map___Redux_Installer
         {
             // Load game directory from environment variable or appsettings.json
             _gameDirectory = Environment.GetEnvironmentVariable("GTAVGameDirectory", EnvironmentVariableTarget.User);
-            _openIVDirectory = Environment.GetEnvironmentVariable("OpenIVDirectory", EnvironmentVariableTarget.User);
 
             if (!string.IsNullOrEmpty(_gameDirectory))
             {
@@ -54,6 +53,11 @@ namespace GTA_V___Mega_Map___Redux_Installer
                 // MessageBox.Show("Game directory not set. Please set the GameDirectory environment variable.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 // Environment.Exit(1); // Optionally, handle this error gracefully
             }
+        }
+
+        private void SaveGameDirectory(string path)
+        {
+            Environment.SetEnvironmentVariable("GTAVGameDirectory", path, EnvironmentVariableTarget.User);
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -83,110 +87,50 @@ namespace GTA_V___Mega_Map___Redux_Installer
                 _gameDirectory = dialog.SelectedPath;
                 gameDirectoryPathLabel.Content = _gameDirectory;
 
-                Environment.SetEnvironmentVariable("GTAVGameDirectory", _gameDirectory, EnvironmentVariableTarget.User);
-            }
-        }
-
-        private void OpenIVDirectory_Click(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = "EXE files (*.exe)|*.exe"
-            };
-            if (openFileDialog.ShowDialog() == true)
-            {
-                _openIVDirectory = openFileDialog.FileName;
-                openIVDirectoryPathLabel.Content = _openIVDirectory;
-
-                Environment.SetEnvironmentVariable("OpenIVDirectory", _openIVDirectory, EnvironmentVariableTarget.User);
+                SaveGameDirectory(_gameDirectory);
             }
         }
 
         private async void Install_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(_oivFilePath) || string.IsNullOrEmpty(_gameDirectory))
+            if (string.IsNullOrEmpty(_gameDirectory) || string.IsNullOrEmpty(_oivFilePath))
             {
-                errorLabel.Content = "Both OIV file and game directory must be selected.";
+                MessageBox.Show("Please select both the game directory and the OIV file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            bool installToMods = installToModsRadio.IsChecked ?? false;
-            IsInstalling = true;
+            installButton.Visibility = Visibility.Collapsed;
+            installationProgressBar.Visibility = Visibility.Visible;
+            cancelButton.Visibility = Visibility.Visible;
+
+            _oivInstaller = new OIVInstaller();
+            _oivInstaller.ProgressChanged += OIVInstaller_ProgressChanged;
 
             try
             {
-                await Task.Run(() => InstallMod(_oivFilePath, _gameDirectory, installToMods));
+                await _oivInstaller.InstallOIVPackageAsync(_oivFilePath, _gameDirectory);
                 MessageBox.Show($"Installation of { Path.GetFileName(_oivFilePath) } completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                errorLabel.Content = $"Installation failed: { ex.Message }";
+                MessageBox.Show($"An error occurred during installation: { ex.Message }", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
-                IsInstalling = false;
+                installButton.Visibility = Visibility.Visible;
+                installationProgressBar.Visibility = Visibility.Collapsed;
+                cancelButton.Visibility = Visibility.Collapsed;
             }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            IsInstalling = false;
+            _oivInstaller?.Cancel();
         }
 
-        private void InstallMod(string oivFilePath, string gameDirectory, bool installToMods)
+        private void OIVInstaller_ProgressChanged(object sender, int e)
         {
-            // Verify the OIV file exists
-            if (!File.Exists(oivFilePath))
-            {
-                Console.WriteLine($"OIV file not found: { oivFilePath }");
-                return;
-            }
-
-            // Determine install location
-            string installLocation = installToMods ? Path.Combine(gameDirectory, "mods") : gameDirectory;
-
-            // Path to OpenIV executable
-            string openIVPath = _openIVDirectory;
-
-            // Command to install the OIV package using OpenIV
-            string arguments = $"\"{ oivFilePath }\" -core.game.select:false -core.game:Five \"{ gameDirectory }\"";
-
-            ProcessStartInfo startInfo = new ProcessStartInfo()
-            {
-                FileName = openIVPath,
-                Arguments = arguments,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-
-            using (Process process = new Process())
-            {
-                process.StartInfo = startInfo;
-                process.Start();
-
-                string output = process.StandardOutput.ReadToEnd();
-                string errors = process.StandardError.ReadToEnd();
-
-                process.WaitForExit();
-
-                Console.WriteLine($"Output from { oivFilePath }:");
-                Console.WriteLine(output);
-                if (!string.IsNullOrEmpty(errors))
-                {
-                    Console.WriteLine($"Errors from { oivFilePath }:");
-                    Console.WriteLine(errors);
-                }
-            }
-        }
-
-        private void UpdateProgressBar(int processedItems, int totalItems)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                installationProgressBar.Value = (double)processedItems / totalItems * 100;
-            });
+            Dispatcher.Invoke(() => installationProgressBar.Value = e);
         }
 
         private void EnableControls(bool enable)
