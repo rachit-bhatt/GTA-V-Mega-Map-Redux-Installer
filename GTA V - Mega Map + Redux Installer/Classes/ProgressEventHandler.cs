@@ -1,6 +1,6 @@
-namespace GTA_V___Mega_Map___Redux_Installer
+namespace GTA_V___Mega_Map___Redux_Installer.Classes
 {
-    public class ProgressEventHandler
+    public class ProgressEventHandler : EventArgs
     {
         public bool isCancelled = false;
 

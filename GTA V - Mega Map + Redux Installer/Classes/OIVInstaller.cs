@@ -1,7 +1,7 @@
 using System.IO;
 using System.Xml;
 
-namespace GTA_V___Mega_Map___Redux_Installer
+namespace GTA_V___Mega_Map___Redux_Installer.Classes
 {
     public class OIVInstaller : ProgressEventHandler
     {
@@ -70,7 +70,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
             if (createIfNotExist)
             {
                 // rpfHandler.CreateRPFFile(rpfPath, rpfType);
-                OnProgressChanged(0, $"Created RPF file: {rpfPath}");
+                OnProgressChanged(0, $"Created RPF file: { rpfPath }");
             }
 
             // Process each add tag
