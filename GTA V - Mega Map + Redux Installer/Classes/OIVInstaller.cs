@@ -73,7 +73,7 @@ namespace GTA_V___Mega_Map___Redux_Installer.Classes
             if (createIfNotExist)
             {
                 // rpfHandler.CreateRPFFile(rpfPath, rpfType);
-                OnProgressChanged(0, $"Created RPF file: { rpfPath }");
+                OnProgressChanged(0, $"Created RPF ({ rpfType }) file: { rpfPath }");
             }
 
             // Process each add tag
