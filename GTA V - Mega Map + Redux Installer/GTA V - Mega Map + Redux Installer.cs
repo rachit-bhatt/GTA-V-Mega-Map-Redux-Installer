@@ -10,6 +10,7 @@ using MessageBox = System.Windows.MessageBox;
 using GTA_V___Mega_Map___Redux_Installer.Classes;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using RadioButton = System.Windows.Controls.RadioButton;
+using System;
 
 namespace GTA_V___Mega_Map___Redux_Installer
 {
@@ -34,8 +35,14 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
         public GTAVMegaMapReduxInstaller()
         {
-            new RPFHandler().ExtractRPFArchive("E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\Sample Data\\common.rpf",
-            "C:\\Users\\Ratch\\AppData\\Local\\Temp\\OIV-Package");
+            #region Debugging
+
+            string rpf_file_loc = "E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\Sample Data\\common.rpf",
+            temp_folder_loc = "C:\\Users\\Ratch\\AppData\\Local\\Temp\\OIV-Package";
+
+            RPFExtractor.ExtractFile(rpf_file_loc, temp_folder_loc);
+
+            #endregion
 
             InitializeComponent();
             DataContext = this;
