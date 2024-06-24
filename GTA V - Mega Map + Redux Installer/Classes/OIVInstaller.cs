@@ -5,7 +5,7 @@ namespace GTA_V___Mega_Map___Redux_Installer.Classes
 {
     public class OIVInstaller : ProgressEventHandler
     {
-        public async void InstallFromXML(string xmlFilePath, string gameDirectory)
+        public async Task InstallFromXMLAsync(string xmlFilePath, string gameDirectory)
         {
             string contentFolderPath = Path.Combine(xmlFilePath, "content");
 
@@ -45,7 +45,7 @@ namespace GTA_V___Mega_Map___Redux_Installer.Classes
                     string rpfType = archiveNode.Attributes["type"].Value;
 
                     // Handle RPF file operations
-                    HandleRPFFile(rpfPath, createIfNotExist, rpfType, contentNode, contentFolderPath, gameDirectory);
+                    await HandleRPFFileAsync(rpfPath, createIfNotExist, rpfType, contentNode, contentFolderPath, gameDirectory);
 
                     // Check if cancelled after each step
                     if (isCancelled)
@@ -63,7 +63,7 @@ namespace GTA_V___Mega_Map___Redux_Installer.Classes
             }
         }
 
-        private void HandleRPFFile(string rpfPath, bool createIfNotExist, string rpfType, XmlNode contentNode, string contentFolderPath, string gameDirectory)
+        private async Task HandleRPFFileAsync(string rpfPath, bool createIfNotExist, string rpfType, XmlNode contentNode, string contentFolderPath, string gameDirectory)
         {
             // Initialize RPF handling logic (assuming OpenRPF library is properly integrated)
             // Example:
