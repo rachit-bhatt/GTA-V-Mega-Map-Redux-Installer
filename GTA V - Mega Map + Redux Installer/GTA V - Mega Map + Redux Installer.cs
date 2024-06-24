@@ -34,6 +34,9 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
         public GTAVMegaMapReduxInstaller()
         {
+            new RPFHandler().ExtractRPFArchive("E:\\GitHub\\Rachit-Bhatt\\GTA-V-Mega-Map-Redux-Installer\\GTA V - Mega Map + Redux Installer\\Sample Data\\common.rpf",
+            "C:\\Users\\Ratch\\AppData\\Local\\Temp\\OIV-Package");
+
             InitializeComponent();
             DataContext = this;
             LoadGameDirectory();

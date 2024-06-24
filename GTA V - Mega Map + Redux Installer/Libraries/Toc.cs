@@ -13,10 +13,10 @@ namespace GTA_V___Mega_Map___Redux_Installer.Libraries
         public List<rpf::FileSystemEntry> FileSystemEntriesList { get => _fseList; }
 
 
-        public Toc(Stream toc, int count)
+        public Toc(Stream toc, MemoryStream namesStream, int count)
         {
-
-            LoadNameSection(toc, count);
+            // LoadNameSection(toc, count);
+            _namesStream = namesStream;
             toc.Seek(0, SeekOrigin.Begin);
 
 
@@ -33,7 +33,7 @@ namespace GTA_V___Mega_Map___Redux_Installer.Libraries
 
                 int fnoffset = BitConverter.ToInt32(temp);
                 _namesStream.Seek(fnoffset, SeekOrigin.Begin);
-                String name = "";
+                String name = "common.rpf";
 
                 byte[] currentLetter = new byte[1];
                 do

@@ -1,5 +1,5 @@
 ﻿GTA V - Mega Map + Redux Installer
-
+1.0.0.0
 
 winexe
 C#
@@ -8,11 +8,11 @@ e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux I
 GTA_V___Mega_Map___Redux_Installer
 none
 false
-TRACE;DEBUG;NET;NET9_0;NETCOREAPP
+TRACE;DEBUG;NET;NET9_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 e:\GitHub\Rachit-Bhatt\GTA-V-Mega-Map-Redux-Installer\GTA V - Mega Map + Redux Installer\App.xaml
 1-692019944
 
-15392566240
+17-300136142
 2131391348386
 GTA V - Mega Map + Redux Installer.xaml;
 

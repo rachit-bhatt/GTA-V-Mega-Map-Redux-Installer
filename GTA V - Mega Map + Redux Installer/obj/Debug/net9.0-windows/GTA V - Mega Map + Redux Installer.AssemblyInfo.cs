@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GTA V - Mega Map + Redux Installer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1876d705ee9d9914bb0f5de5060f9eee5eb751ca")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+832d5772f20ab81dec401f55ace0409df15fa272")]
 [assembly: System.Reflection.AssemblyProductAttribute("GTA V - Mega Map + Redux Installer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GTA V - Mega Map + Redux Installer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

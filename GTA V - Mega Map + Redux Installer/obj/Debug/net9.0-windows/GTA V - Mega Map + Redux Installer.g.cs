@@ -142,8 +142,8 @@ namespace GTA_V___Mega_Map___Redux_Installer {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri(("/GTA V - Mega Map + Redux Installer;component/gta%20v%20-%20mega%20map%20+%20redu" +
-                    "x%20installer.xaml"), System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri(("/GTA V - Mega Map + Redux Installer;V1.0.0.0;component/gta%20v%20-%20mega%20map%2" +
+                    "0+%20redux%20installer.xaml"), System.UriKind.Relative);
             
             #line 1 "..\..\..\GTA V - Mega Map + Redux Installer.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
