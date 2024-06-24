@@ -5,8 +5,10 @@ namespace GTA_V___Mega_Map___Redux_Installer.Classes
 {
     public class OIVInstaller : ProgressEventHandler
     {
-        public void InstallFromXML(string xmlFilePath, string contentFolderPath, string gameDirectory)
+        public async void InstallFromXML(string xmlFilePath, string gameDirectory)
         {
+            string contentFolderPath = Path.Combine(xmlFilePath, "content");
+
             try
             {
                 isCancelled = false;
@@ -17,6 +19,7 @@ namespace GTA_V___Mega_Map___Redux_Installer.Classes
 
                 // Validate the root package element
                 XmlElement packageElement = xmlDoc.SelectSingleNode("/package") as XmlElement;
+
                 if (packageElement == null || packageElement.GetAttribute("target") != "Five")
                 {
                     OnProgressChanged(0, "Invalid or unsupported package.");

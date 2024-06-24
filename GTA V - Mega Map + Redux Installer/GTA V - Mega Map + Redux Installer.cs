@@ -108,6 +108,7 @@ namespace GTA_V___Mega_Map___Redux_Installer
 
             try
             {
+                await _oivInstaller.InstallFromXML(xmlFilePath: _oivFilePath, gameDirectory: _gameDirectory);
                 // await _oivInstaller.InstallOIVPackageAsync(_oivFilePath, _gameDirectory);
                 MessageBox.Show($"Installation of { Path.GetFileName(_oivFilePath) } completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
